@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -25,14 +26,24 @@ func main() {
 	}
 
 	tail := os.Args[2:]
+	var delay time.Duration
+	var idxShift int
+	if dur, err := time.ParseDuration(tail[0]); err == nil {
+		delay = dur
+		idxShift = 1
+	}
+
 	for i := 0; i < count; i++ {
-		cmd := exec.Command(tail[0], tail[1:]...) //nolint:gosec
+		if i != 0 {
+			time.Sleep(delay)
+		}
+
+		cmd := exec.Command(tail[0+idxShift], tail[1+idxShift:]...) //nolint:gosec
 		cmd.Stdout = os.Stdout
 		cmd.Stdin = os.Stdin
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
-			fmt.Println("run command", err.Error())
-			os.Exit(1)
+			fmt.Println(err.Error())
 		}
 	}
 }
