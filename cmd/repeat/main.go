@@ -10,7 +10,11 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Println("not enough argument")
+		fmt.Println("not enough arguments")
+		fmt.Println("example of usages:")
+		fmt.Println("\t", "repeat 10 curl https://example.com")
+		fmt.Println("\t", "repeat 10 5s date")
+		fmt.Println("\t", "repeat 10 not-exists-program")
 		os.Exit(1)
 	}
 
